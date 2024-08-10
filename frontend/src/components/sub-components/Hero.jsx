@@ -1,4 +1,6 @@
+import { Search } from "lucide-react";
 import { Link } from "react-router-dom";
+import { Button } from "../ui/button";
 
 const Hero = () => {
   return (
@@ -16,7 +18,7 @@ const Hero = () => {
             className="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"
           />
         </div>
-        <div className="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56">
+        <div className="mx-auto max-w-2xl pt-40 pb-16 sm:pt-48 lg:pt-56">
           <div className="hidden sm:mb-8 sm:flex sm:justify-center">
             <div className="relative rounded-full px-3 py-1 text-sm leading-6 text-gray-400 ring-1 ring-gray-200/10 hover:ring-gray-200/20 transition-all duration-300">
               India's #1 Job Search Site.{" "}
@@ -39,6 +41,16 @@ const Hero = () => {
               Whether you're a recent graduate or an experienced professional,
               find opportunities tailored to your skills and preferences.
             </p>
+            <div className="flex sm:w-4/5 shadow-lg border border-gray-200 pl-3 rounded-full items-center gap-4 mx-auto mt-6">
+              <input
+                type="text"
+                placeholder="Find your dream jobs"
+                className="outline-none border-none w-full bg-transparent text-white"
+              />
+              <Button className="rounded-r-full bg-indigo-500">
+                <Search className="h-5 w-5" />
+              </Button>
+            </div>
           </div>
         </div>
         <div
