@@ -4,10 +4,13 @@ import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { useDispatch, useSelector } from "react-redux";
+import { setLoading, setUser } from "@/store/slices/authSlice";
 
 const Login = () => {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+  const { loading } = useSelector((state) => state.auth);
 
   const [input, setInput] = useState({
     email: "",
@@ -25,7 +28,7 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      setLoading(true);
+      dispatch(setLoading(true));
       const res = await axios.post(`${BACKEND_USER_URL}/login`, input, {
         headers: {
           "Content-Type": "application/json",
@@ -34,12 +37,13 @@ const Login = () => {
       });
 
       if (res.data.success) {
-        setLoading(false);
+        dispatch(setLoading(false));
+        dispatch(setUser(res.data.user));
         navigate("/");
         toast.success(res.data.message);
       }
     } catch (error) {
-      setLoading(false);
+      dispatch(setLoading(false));
       toast.error(
         error.response.data.message || "Something went wrong. Please try again."
       );
