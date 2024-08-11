@@ -1,6 +1,14 @@
-import { Dialog, DialogPanel } from "@headlessui/react";
-import { Menu, MoveRight, X } from "lucide-react";
+import {
+  Dialog,
+  DialogPanel,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuItems,
+} from "@headlessui/react";
+import { AlignJustify, MoveRight, X } from "lucide-react";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 const navigation = [
@@ -12,7 +20,8 @@ const navigation = [
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  
+  const { user } = useSelector((state) => state.auth);
+
   return (
     <header className="absolute inset-x-0 top-0 z-50">
       <nav
@@ -32,7 +41,7 @@ const Navbar = () => {
             onClick={() => setMobileMenuOpen(true)}
             className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-500"
           >
-            <Menu className="h-6 w-6" />
+            <AlignJustify className="h-6 w-6" />
           </button>
         </div>
         <div className="hidden lg:flex lg:gap-x-12">
@@ -47,12 +56,50 @@ const Navbar = () => {
           ))}
         </div>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <Link
-            to="/login"
-            className="text-sm font-semibold leading-6 text-gray-300"
-          >
-            Log in <span aria-hidden="true">&rarr;</span>
-          </Link>
+          {user ? (
+            <Menu as="div" className="relative ml-3">
+              <div>
+                <MenuButton className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+                  <span className="absolute -inset-1.5" />
+                  <span className="sr-only">Open user menu</span>
+                  <img
+                    alt=""
+                    src={
+                      user?.profile?.profilePhoto?.url
+                        ? user?.profile?.profilePhoto?.url
+                        : "https://github.com/shadcn.png"
+                    }
+                    className="h-8 w-8 rounded-full"
+                  />
+                </MenuButton>
+              </div>
+              <MenuItems
+                transition
+                className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
+              >
+                <MenuItem>
+                  <Link
+                    to="/profile"
+                    className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
+                  >
+                    Your Profile
+                  </Link>
+                </MenuItem>
+                <MenuItem>
+                  <button className="w-full text-left px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
+                    Sign out
+                  </button>
+                </MenuItem>
+              </MenuItems>
+            </Menu>
+          ) : (
+            <Link
+              to="/login"
+              className="text-sm font-semibold leading-6 text-gray-300"
+            >
+              Log in <span aria-hidden="true">&rarr;</span>
+            </Link>
+          )}
         </div>
       </nav>
       <Dialog
@@ -90,13 +137,27 @@ const Navbar = () => {
                 ))}
               </div>
               <div className="py-6">
-                <Link
-                  to="/login"
-                  className="-mx-3 flex items-center gap-1 rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-300 hover:bg-gray-800"
-                >
-                  Log in
-                  <MoveRight className="w-4 h-4 mt-1" />
-                </Link>
+                {user ? (
+                  <>
+                    <Link
+                      to="/profile"
+                      className="-mx-3 flex items-center gap-1 rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-300 hover:bg-gray-800"
+                    >
+                      Your Profile
+                    </Link>
+                    <button className="-mx-3 flex items-center gap-1 rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-300 hover:bg-gray-800">
+                      Logout
+                    </button>
+                  </>
+                ) : (
+                  <Link
+                    to="/login"
+                    className="-mx-3 flex items-center gap-1 rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-300 hover:bg-gray-800"
+                  >
+                    Log in
+                    <MoveRight className="w-4 h-4 mt-1" />
+                  </Link>
+                )}
               </div>
             </div>
           </div>
