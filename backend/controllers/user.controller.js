@@ -47,8 +47,8 @@ export const handleRegisterUser = async (req, res) => {
       role,
       profile: {
         profilePhoto: {
-          public_id: uploadResponseForProfile.public_id || "",
-          url: uploadResponseForProfile.secure_url || "",
+          public_id: uploadResponseForProfile?.public_id || "",
+          url: uploadResponseForProfile?.secure_url || "",
         },
       },
     });
@@ -58,9 +58,10 @@ export const handleRegisterUser = async (req, res) => {
       message: "Account created successfully.",
     });
   } catch (error) {
+    console.log("Error during registration", error);
     res.status(500).json({
       success: false,
-      message: error,
+      message: error.message || "Internal Server Error",
     });
   }
 };

@@ -1,7 +1,16 @@
 import express from "express";
 import fileUpload from "express-fileupload";
+import cors from "cors";
 
 const app = express();
+
+// CORS CONFIG
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
 
 // MIDDLEWARES
 app.use(express.urlencoded({ extended: true }));

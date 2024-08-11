@@ -4,6 +4,7 @@ import Navbar from "./components/shared/Navbar";
 import Footer from "./components/shared/Footer";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
+import { Toaster } from "./components/ui/sonner";
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
         <Route path="/login" element={<Login />} />
       </Routes>
       <Footer />
+      <Toaster />
     </Router>
   );
 };
