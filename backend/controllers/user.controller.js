@@ -1,5 +1,6 @@
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
+import cloudinary from "../config/cloudinary.js";
 
 export const handleRegisterUser = async (req, res) => {
   try {
@@ -21,7 +22,16 @@ export const handleRegisterUser = async (req, res) => {
         message: "User already exist with this email.",
       });
 
-    // TODO: HANDLE PROFILE PHOTO (WITH CLOUDINARY)
+    // HANDLE PROFILE PHOTO (WITH CLOUDINARY)
+    let uploadResponseForProfile;
+    if (req.files && req.files.profilePhoto) {
+      const { profilePhoto } = req.files;
+
+      uploadResponseForProfile = await cloudinary.uploader.upload(
+        profilePhoto.tempFilePath,
+        { folder: "Job Portal Profile" }
+      );
+    }
 
     // 👉 REGISTER NEW USER
 
@@ -35,6 +45,12 @@ export const handleRegisterUser = async (req, res) => {
       phone,
       password: hashedPassword,
       role,
+      profile: {
+        profilePhoto: {
+          public_id: uploadResponseForProfile.public_id || "",
+          url: uploadResponseForProfile.secure_url || "",
+        },
+      },
     });
 
     return res.status(201).json({
