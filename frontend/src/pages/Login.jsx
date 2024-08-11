@@ -1,6 +1,51 @@
-import { Link } from "react-router-dom";
+import { BACKEND_USER_URL } from "@/constants/constants";
+import axios from "axios";
+import { Loader2 } from "lucide-react";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 const Login = () => {
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+
+  const [input, setInput] = useState({
+    email: "",
+    password: "",
+    role: "job-seeker",
+  });
+
+  // HANDLE INPUT CHANGE
+  const handleInputChange = (e) => {
+    setInput({ ...input, [e.target.name]: e.target.value });
+  };
+
+  // HANDLE SUBMIT FORM
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      setLoading(true);
+      const res = await axios.post(`${BACKEND_USER_URL}/login`, input, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      });
+
+      if (res.data.success) {
+        setLoading(false);
+        navigate("/");
+        toast.success(res.data.message);
+      }
+    } catch (error) {
+      setLoading(false);
+      toast.error(
+        error.response.data.message || "Something went wrong. Please try again."
+      );
+    }
+  };
+
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-24 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -10,7 +55,7 @@ const Login = () => {
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-sm">
-        <form action="#" method="POST" className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label
               htmlFor="email"
@@ -26,6 +71,8 @@ const Login = () => {
                 required
                 autoComplete="email"
                 placeholder="abc@gmail.com"
+                value={input.email}
+                onChange={handleInputChange}
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm placeholder:text-gray-400 focus:outline-indigo-800 sm:text-sm sm:leading-6 pl-1"
               />
             </div>
@@ -55,6 +102,8 @@ const Login = () => {
                 type="password"
                 required
                 autoComplete="password"
+                value={input.password}
+                onChange={handleInputChange}
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm placeholder:text-gray-400 focus:outline-indigo-800 sm:text-sm sm:leading-6 pl-1"
               />
             </div>
@@ -74,6 +123,8 @@ const Login = () => {
                 id="role"
                 name="role"
                 autoComplete="role"
+                value={input.role}
+                onChange={handleInputChange}
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm placeholder:text-gray-400 focus:outline-indigo-800 sm:text-sm sm:leading-6 pl-1"
               >
                 <option value="job-seeker">Job Seeker</option>
@@ -83,12 +134,19 @@ const Login = () => {
           </div>
 
           <div>
-            <button
-              type="submit"
-              className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            >
-              Sign in
-            </button>
+            {loading ? (
+              <button className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait{" "}
+              </button>
+            ) : (
+              <button
+                type="submit"
+                disabled={loading}
+                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              >
+                Sign in
+              </button>
+            )}
           </div>
         </form>
 
