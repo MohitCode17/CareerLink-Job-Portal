@@ -142,3 +142,17 @@ export const handleLoginUser = async (req, res) => {
     });
   }
 };
+
+export const handleLogoutUser = async (req, res) => {
+  try {
+    return res.status(200).cookie("authToken", "", { maxAge: 0 }).json({
+      success: true,
+      message: "Logout Successfully.",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message || "Internal Server Error",
+    });
+  }
+};
