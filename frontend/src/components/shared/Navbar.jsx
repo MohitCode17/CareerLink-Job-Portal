@@ -7,7 +7,7 @@ import {
   MenuItems,
 } from "@headlessui/react";
 import { AlignJustify, MoveRight, X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { setUser } from "@/store/slices/authSlice";
@@ -26,6 +26,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const { user } = useSelector((state) => state.auth);
 
   // HANDLE LOGOUT
@@ -47,8 +48,25 @@ const Navbar = () => {
     }
   };
 
+  // Add scroll event listener
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 0);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
-    <header className="absolute inset-x-0 top-0 z-50">
+    <header
+      className={`fixed inset-x-0 top-0 z-50 transition ${
+        isScrolled ? "bg-black/30 backdrop-blur-sm" : ""
+      }`}
+    >
       <nav
         aria-label="Global"
         className="flex items-center justify-between p-6 lg:px-8"

@@ -5,6 +5,7 @@ import Footer from "./components/shared/Footer";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import { Toaster } from "./components/ui/sonner";
+import Profile from "./pages/Profile";
 
 const App = () => {
   return (
@@ -14,6 +15,7 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
       <Footer />
       <Toaster />
