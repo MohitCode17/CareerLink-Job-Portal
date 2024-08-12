@@ -8,8 +8,12 @@ import {
 } from "@headlessui/react";
 import { AlignJustify, MoveRight, X } from "lucide-react";
 import { useState } from "react";
-import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { setUser } from "@/store/slices/authSlice";
+import axios from "axios";
+import { BACKEND_USER_URL } from "@/constants/constants";
+import { toast } from "sonner";
 
 const navigation = [
   { name: "Home", href: "/" },
@@ -19,8 +23,29 @@ const navigation = [
 ];
 
 const Navbar = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { user } = useSelector((state) => state.auth);
+
+  // HANDLE LOGOUT
+  const handleLogout = async () => {
+    try {
+      const res = await axios.get(`${BACKEND_USER_URL}/logout`, {
+        withCredentials: true,
+      });
+
+      if (res.data.success) {
+        dispatch(setUser(null));
+        toast.success(res.data.message);
+        navigate("/");
+      }
+    } catch (error) {
+      toast.error(
+        error.response.data.message || "Error while logout, Please try again."
+      );
+    }
+  };
 
   return (
     <header className="absolute inset-x-0 top-0 z-50">
@@ -86,7 +111,10 @@ const Navbar = () => {
                   </Link>
                 </MenuItem>
                 <MenuItem>
-                  <button className="w-full text-left px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
+                  <button
+                    onClick={handleLogout}
+                    className="w-full text-left px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
+                  >
                     Sign out
                   </button>
                 </MenuItem>
@@ -145,7 +173,10 @@ const Navbar = () => {
                     >
                       Your Profile
                     </Link>
-                    <button className="-mx-3 flex items-center gap-1 rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-300 hover:bg-gray-800">
+                    <button
+                      onClick={handleLogout}
+                      className="-mx-3 flex items-center gap-1 rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-300 hover:bg-gray-800"
+                    >
                       Logout
                     </button>
                   </>
