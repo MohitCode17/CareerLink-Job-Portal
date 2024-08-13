@@ -15,4 +15,7 @@ router.post("/create", authenticate, checkRecruiterRole, handleCreateJob);
 
 // GET ALL JOBS (FOR JOB-SEEKER SIDE)
 router.get("/get", handleGetJobs);
+
+// GET ALL JOB (FOR JOB-SEEKER SIDE)
+router.get("/get/:id", handleGetJobs);
 export default router;
