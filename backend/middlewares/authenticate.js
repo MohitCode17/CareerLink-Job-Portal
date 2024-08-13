@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import { config } from "../config/env-config.js";
+import User from "../models/user.model.js";
 
 export const authenticate = (req, res, next) => {
   try {
@@ -24,5 +25,26 @@ export const authenticate = (req, res, next) => {
     next();
   } catch (error) {
     console.log(error.message);
+  }
+};
+
+export const checkRecruiterRole = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.id);
+
+    if (!user || user.role !== "recruiter") {
+      return res.status(403).json({
+        success: false,
+        message: "Only recruiters can perform this action.",
+      });
+    }
+
+    next();
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      message: "An error occurred while checking the user role.",
+    });
   }
 };

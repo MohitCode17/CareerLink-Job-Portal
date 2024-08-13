@@ -31,8 +31,10 @@ app.get("/test", (req, res) => {
 
 // IMPORT ROUTES
 import userRoutes from "./routes/user.route.js";
+import jobRoutes from "./routes/job.route.js";
 
 // DECLARATION OF ROUTES
 app.use("/api/v1/user", userRoutes);
+app.use("/api/v1/job", jobRoutes);
 
 export { app };
