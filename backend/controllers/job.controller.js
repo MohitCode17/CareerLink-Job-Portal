@@ -121,3 +121,27 @@ export const handleGetJob = async (req, res) => {
     });
   }
 };
+
+export const handleGetJobForAdmin = async (req, res) => {
+  try {
+    const adminId = req.id;
+
+    const jobs = await Job.find({ created_by: adminId });
+
+    if (!jobs)
+      return res.status(404).json({
+        success: false,
+        message: "No Jobs Found.",
+      });
+
+    return res.status(200).json({
+      success: true,
+      jobs,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message || "Internal Server Error.",
+    });
+  }
+};
