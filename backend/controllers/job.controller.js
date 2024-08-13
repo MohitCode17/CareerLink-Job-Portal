@@ -60,3 +60,38 @@ export const handleCreateJob = async (req, res) => {
     });
   }
 };
+
+export const handleGetJobs = async (req, res) => {
+  try {
+    // SEARCH QUERY
+    const keyword = req.query.keyword || "";
+    const query = {
+      $or: [
+        { title: { $regex: keyword, $options: "i" } },
+        { description: { $regex: keyword, $options: "i" } },
+      ],
+    };
+
+    const jobs = await Job.find(query)
+      .populate({
+        path: "company",
+      })
+      .sort({ createdAt: -1 });
+
+    if (!jobs)
+      return res.status(404).json({
+        success: false,
+        message: "No Jobs Found.",
+      });
+
+    return res.status(200).json({
+      success: true,
+      jobs,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message || "Internal Server Error.",
+    });
+  }
+};
