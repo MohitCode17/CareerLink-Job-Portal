@@ -29,7 +29,7 @@ const Profile = () => {
             </div>
           </div>
           {/* Edit Profile Dialog */}
-          <EditProfileDialog user={user} />
+          <EditProfileDialog />
         </div>
 
         <div className="my-5">
