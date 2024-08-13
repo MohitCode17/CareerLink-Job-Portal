@@ -6,6 +6,7 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import { Toaster } from "./components/ui/sonner";
 import Profile from "./pages/Profile";
+import Jobs from "./pages/Jobs";
 
 const App = () => {
   return (
@@ -16,6 +17,7 @@ const App = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/jobs" element={<Jobs />} />
       </Routes>
       <Footer />
       <Toaster />
