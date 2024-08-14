@@ -33,10 +33,12 @@ app.get("/test", (req, res) => {
 import userRoutes from "./routes/user.route.js";
 import jobRoutes from "./routes/job.route.js";
 import companyRoutes from "./routes/company.route.js";
+import applicationRoute from "./routes/application.route.js";
 
 // DECLARATION OF ROUTES
 app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/job", jobRoutes);
 app.use("/api/v1/company", companyRoutes);
+app.use("/api/v1/application", applicationRoute);
 
 export { app };
