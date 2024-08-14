@@ -3,6 +3,7 @@ import {
   handleApplyJob,
   handleGetApplicants,
   handleGetApplications,
+  handleUpdateStatus,
 } from "../controllers/application.controller.js";
 import {
   authenticate,
@@ -25,4 +26,11 @@ router.get(
   handleGetApplicants
 );
 
+// UPDATE APPLICATION STATUS (FOR RECRUITER)
+router.put(
+  "/status/:id/update",
+  authenticate,
+  checkRecruiterRole,
+  handleUpdateStatus
+);
 export default router;

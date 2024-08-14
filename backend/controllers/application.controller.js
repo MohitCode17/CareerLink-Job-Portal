@@ -113,3 +113,39 @@ export const handleGetApplicants = async (req, res) => {
     });
   }
 };
+
+export const handleUpdateStatus = async (req, res) => {
+  try {
+    const { status } = req.body;
+    const applicationId = req.params.id;
+
+    if (!status)
+      return res.status(400).json({
+        success: false,
+        message: "Status is required",
+      });
+
+    // Find the application by application id
+    const application = await Application.findOne({ _id: applicationId });
+
+    if (!application)
+      return res.status(404).json({
+        success: false,
+        message: "Application not found",
+      });
+
+    // Update the status
+    application.status = status.toLowerCase();
+    await application.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Status updated successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message || "Internal Server Error",
+    });
+  }
+};
