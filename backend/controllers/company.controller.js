@@ -83,3 +83,35 @@ export const handleGetCompany = async (req, res) => {
     });
   }
 };
+
+export const handleUpdateCompany = async (req, res) => {
+  try {
+    const { name, description, website, location } = req.body;
+
+    const updatedData = {
+      name,
+      description,
+      website,
+      location,
+    };
+
+    const company = await Company.findByIdAndUpdate(
+      req.params.id,
+      updatedData,
+      { new: true }
+    );
+
+    if (!company)
+      return res.status(404).json({
+        success: false,
+        message: "Company not found",
+      });
+
+    return res.status(200).json({
+      success: true,
+      message: "Company information updated.",
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};

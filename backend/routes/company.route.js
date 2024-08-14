@@ -3,6 +3,7 @@ import {
   handleCreateCompany,
   handleGetCompanies,
   handleGetCompany,
+  handleUpdateCompany,
 } from "../controllers/company.controller.js";
 import {
   authenticate,
@@ -18,5 +19,8 @@ router.get("/get", authenticate, checkRecruiterRole, handleGetCompanies);
 
 // GET ALL COMPANY
 router.get("/get/:id", handleGetCompany);
+
+// UPDATE COMPANY
+router.put("/update/:id", authenticate, checkRecruiterRole, handleUpdateCompany);
 
 export default router;
