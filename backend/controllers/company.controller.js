@@ -37,3 +37,26 @@ export const handleCreateCompany = async (req, res) => {
     });
   }
 };
+
+export const handleGetCompanies = async (req, res) => {
+  try {
+    const userId = req.id;
+    const companies = await Company.find({ userId });
+
+    if (!companies)
+      return res.status(404).json({
+        success: false,
+        message: "Companies not found.",
+      });
+
+    return res.status(200).json({
+      success: true,
+      companies,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message || "Internal Server Error",
+    });
+  }
+};
