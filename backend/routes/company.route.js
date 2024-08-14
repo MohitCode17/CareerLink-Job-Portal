@@ -2,6 +2,7 @@ import express from "express";
 import {
   handleCreateCompany,
   handleGetCompanies,
+  handleGetCompany,
 } from "../controllers/company.controller.js";
 import {
   authenticate,
@@ -14,5 +15,8 @@ router.post("/create", authenticate, checkRecruiterRole, handleCreateCompany);
 
 // GET ALL COMPANIES (FOR RECRUITER VIEW)
 router.get("/get", authenticate, checkRecruiterRole, handleGetCompanies);
+
+// GET ALL COMPANY
+router.get("/get/:id", handleGetCompany);
 
 export default router;
