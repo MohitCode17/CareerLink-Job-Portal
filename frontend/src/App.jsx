@@ -7,6 +7,9 @@ import Login from "./pages/Login";
 import { Toaster } from "./components/ui/sonner";
 import Profile from "./pages/Profile";
 import Jobs from "./pages/Jobs";
+import Companies from "./components/admin/Companies";
+import AdminJobs from "./components/admin/AdminJobs";
+import CreateCompany from "./components/admin/CreateCompany";
 
 const App = () => {
   return (
@@ -18,6 +21,11 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/jobs" element={<Jobs />} />
+
+        {/* ADMIN / RECRUITER RELATED ROUTES */}
+        <Route path="/admin/companies" element={<Companies />} />
+        <Route path="/admin/jobs" element={<AdminJobs />} />
+        <Route path="/admin/company/create" element={<CreateCompany />} />
       </Routes>
       <Footer />
       <Toaster />
