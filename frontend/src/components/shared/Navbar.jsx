@@ -15,11 +15,16 @@ import axios from "axios";
 import { BACKEND_USER_URL } from "@/constants/constants";
 import { toast } from "sonner";
 
-const navigation = [
+const navigationForJobSeeker = [
   { name: "Home", href: "/" },
   { name: "About", href: "/about" },
   { name: "Jobs", href: "/jobs" },
   { name: "Browse", href: "/browse" },
+];
+
+const navigationForRecruiter = [
+  { name: "Companies", href: "/admin/companies" },
+  { name: "Jobs", href: "/admin/jobs" },
 ];
 
 const Navbar = () => {
@@ -88,15 +93,25 @@ const Navbar = () => {
           </button>
         </div>
         <div className="hidden lg:flex lg:gap-x-12">
-          {navigation.map((item) => (
-            <Link
-              key={item.name}
-              to={item.href}
-              className="text-sm font-semibold leading-6 text-gray-300"
-            >
-              {item.name}
-            </Link>
-          ))}
+          {user && user.role === "recruiter"
+            ? navigationForRecruiter.map((item) => (
+                <Link
+                  key={item.name}
+                  to={item.href}
+                  className="text-sm font-semibold leading-6 text-gray-300"
+                >
+                  {item.name}
+                </Link>
+              ))
+            : navigationForJobSeeker.map((item) => (
+                <Link
+                  key={item.name}
+                  to={item.href}
+                  className="text-sm font-semibold leading-6 text-gray-300"
+                >
+                  {item.name}
+                </Link>
+              ))}
         </div>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
           {user ? (
@@ -120,14 +135,16 @@ const Navbar = () => {
                 transition
                 className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
               >
-                <MenuItem>
-                  <Link
-                    to="/profile"
-                    className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
-                  >
-                    Your Profile
-                  </Link>
-                </MenuItem>
+                {user && user.role === "job-seeker" && (
+                  <MenuItem>
+                    <Link
+                      to="/profile"
+                      className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
+                    >
+                      Your Profile
+                    </Link>
+                  </MenuItem>
+                )}
                 <MenuItem>
                   <button
                     onClick={handleLogout}
@@ -148,6 +165,7 @@ const Navbar = () => {
           )}
         </div>
       </nav>
+      {/* MOBILE NAVBAR */}
       <Dialog
         open={mobileMenuOpen}
         onClose={setMobileMenuOpen}
@@ -172,25 +190,37 @@ const Navbar = () => {
           <div className="mt-6 flow-root">
             <div className="-my-6 divide-y divide-gray-900">
               <div className="space-y-2 py-6">
-                {navigation.map((item) => (
-                  <Link
-                    key={item.name}
-                    to={item.href}
-                    className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-300 hover:bg-gray-800"
-                  >
-                    {item.name}
-                  </Link>
-                ))}
+                {user && user.role === "recruiter"
+                  ? navigationForRecruiter.map((item) => (
+                      <Link
+                        key={item.name}
+                        to={item.href}
+                        className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-300 hover:bg-gray-800"
+                      >
+                        {item.name}
+                      </Link>
+                    ))
+                  : navigationForJobSeeker.map((item) => (
+                      <Link
+                        key={item.name}
+                        to={item.href}
+                        className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-300 hover:bg-gray-800"
+                      >
+                        {item.name}
+                      </Link>
+                    ))}
               </div>
               <div className="py-6">
                 {user ? (
                   <>
-                    <Link
-                      to="/profile"
-                      className="-mx-3 flex items-center gap-1 rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-300 hover:bg-gray-800"
-                    >
-                      Your Profile
-                    </Link>
+                    {user && user.role === "job-seeker" && (
+                      <Link
+                        to="/profile"
+                        className="-mx-3 flex items-center gap-1 rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-300 hover:bg-gray-800"
+                      >
+                        Your Profile
+                      </Link>
+                    )}
                     <button
                       onClick={handleLogout}
                       className="-mx-3 flex items-center gap-1 rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-300 hover:bg-gray-800"
