@@ -18,9 +18,14 @@ router.post("/create", authenticate, checkRecruiterRole, handleCreateCompany);
 router.get("/get", authenticate, checkRecruiterRole, handleGetCompanies);
 
 // GET ALL COMPANY
-router.get("/get/:id", handleGetCompany);
+router.get("/get/:id", authenticate, checkRecruiterRole, handleGetCompany);
 
 // UPDATE COMPANY
-router.put("/update/:id", authenticate, checkRecruiterRole, handleUpdateCompany);
+router.put(
+  "/update/:id",
+  authenticate,
+  checkRecruiterRole,
+  handleUpdateCompany
+);
 
 export default router;

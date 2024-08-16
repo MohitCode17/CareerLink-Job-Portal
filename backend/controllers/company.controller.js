@@ -1,3 +1,4 @@
+import cloudinary from "../config/cloudinary.js";
 import Company from "../models/company.model.js";
 
 export const handleCreateCompany = async (req, res) => {
@@ -88,18 +89,8 @@ export const handleUpdateCompany = async (req, res) => {
   try {
     const { name, description, website, location } = req.body;
 
-    const updatedData = {
-      name,
-      description,
-      website,
-      location,
-    };
-
-    const company = await Company.findByIdAndUpdate(
-      req.params.id,
-      updatedData,
-      { new: true }
-    );
+    const companyId = req.params.id;
+    let company = await Company.findById(companyId);
 
     if (!company)
       return res.status(404).json({
@@ -107,11 +98,49 @@ export const handleUpdateCompany = async (req, res) => {
         message: "Company not found",
       });
 
+    // HANDLE COMPANY LOGO
+    if (req.files && req.files.logo) {
+      const { logo } = req.files;
+
+      // DELETE EXISTING LOGO IF ANY
+      if (company.logo && company.logo.public_id) {
+        await cloudinary.uploader.destroy(company.logo.public_id);
+      }
+
+      // UPLOAD NEW LOGO
+      const uploadResponseForLogo = await cloudinary.uploader.upload(
+        logo.tempFilePath,
+        { folder: "Job Portal Company Logo" }
+      );
+
+      // INCLUDE NEW LOGO DATA IN UPDATE
+      company.logo = {
+        public_id: uploadResponseForLogo?.public_id,
+        url: uploadResponseForLogo?.secure_url,
+      };
+    }
+
+    const updatedData = {
+      name,
+      description,
+      website,
+      location,
+      logo: company.logo, // INCLUDE THE UPDATE LOGO DATA
+    };
+
+    company = await Company.findByIdAndUpdate(req.params.id, updatedData, {
+      new: true,
+    });
+
     return res.status(200).json({
       success: true,
       message: "Company information updated.",
+      company,
     });
   } catch (error) {
-    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: error.message || "Internal Server Error",
+    });
   }
 };
