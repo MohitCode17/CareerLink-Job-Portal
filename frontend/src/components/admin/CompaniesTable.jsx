@@ -9,8 +9,13 @@ import {
   TableRow,
 } from "../ui/table";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const CompaniesTable = () => {
+  const { companies } = useSelector((state) => state.company);
+  const navigate = useNavigate();
+
   return (
     <div className="my-20">
       <Table>
@@ -24,29 +29,44 @@ const CompaniesTable = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          <TableCell>
-            <div className="w-10 h-10 rounded-full">
-              <img
-                src="https://github.com/shadcn.png"
-                className="w-full h-full object-cover rounded-full"
-              />
-            </div>
-          </TableCell>
-          <TableCell className="text-white">Microsoft</TableCell>
-          <TableCell className="text-white">28-06-2024</TableCell>
-          <TableCell className="text-right cursor-pointer">
-            <Popover>
-              <PopoverTrigger>
-                <MoreHorizontal className="text-white" />
-              </PopoverTrigger>
-              <PopoverContent className="w-32">
-                <div className="flex items-center gap-2 w-fit cursor-pointer">
-                  <Edit2 className="w-4" />
-                  <span>Edit</span>
-                </div>
-              </PopoverContent>
-            </Popover>
-          </TableCell>
+          {companies?.length <= 0
+            ? "No Companies Found"
+            : companies?.map((company) => (
+                <tr key={company._id}>
+                  <TableCell>
+                    <div className="w-10 h-10 rounded-full">
+                      <img
+                        src={
+                          company?.logo?.url || "https://github.com/shadcn.png"
+                        }
+                        className="w-full h-full object-cover rounded-full"
+                      />
+                    </div>
+                  </TableCell>
+                  <TableCell className="text-white">{company?.name}</TableCell>
+                  <TableCell className="text-white">
+                    {company?.createdAt?.split("T")[0]}
+                  </TableCell>
+                  <TableCell className="text-right cursor-pointer">
+                    <Popover>
+                      <PopoverTrigger>
+                        <MoreHorizontal className="text-white" />
+                      </PopoverTrigger>
+                      <PopoverContent className="w-32">
+                        <div
+                          className="flex items-center gap-2 w-fit cursor-pointer"
+                          onClick={() =>
+                            navigate(`/admin/companies/${company._id}`)
+                          }
+                        >
+                          <Edit2 className="w-4" />
+                          <span>Edit</span>
+                        </div>
+                      </PopoverContent>
+                    </Popover>
+                  </TableCell>
+                </tr>
+              ))}
         </TableBody>
       </Table>
     </div>

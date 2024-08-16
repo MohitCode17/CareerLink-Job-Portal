@@ -79,7 +79,7 @@ const CompanySetup = () => {
       name: singleCompany?.name || "",
       description: singleCompany?.description || "",
       website: singleCompany?.website || "",
-      location: singleCompany?.locatiion || "",
+      location: singleCompany?.location || "",
       logo: singleCompany?.logo || null,
     });
   }, [singleCompany]);
