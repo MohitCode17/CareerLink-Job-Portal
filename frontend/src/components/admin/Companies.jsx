@@ -15,7 +15,7 @@ const Companies = () => {
             placeholder="Filter by name"
           />
           <Button
-            onClick={() => navigate("/admin/companies/create")}
+            onClick={() => navigate("/admin/company/create")}
             className="bg-indigo-500 hover:bg-indigo-600 transition-all duration-300 self-start"
           >
             Create New Company

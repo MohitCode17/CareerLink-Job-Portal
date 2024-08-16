@@ -10,6 +10,7 @@ import Jobs from "./pages/Jobs";
 import Companies from "./components/admin/Companies";
 import AdminJobs from "./components/admin/AdminJobs";
 import CreateCompany from "./components/admin/CreateCompany";
+import CompanySetup from "./components/admin/CompanySetup";
 
 const App = () => {
   return (
@@ -24,6 +25,7 @@ const App = () => {
 
         {/* ADMIN / RECRUITER RELATED ROUTES */}
         <Route path="/admin/companies" element={<Companies />} />
+        <Route path="/admin/companies/:id" element={<CompanySetup />} />
         <Route path="/admin/jobs" element={<AdminJobs />} />
         <Route path="/admin/company/create" element={<CreateCompany />} />
       </Routes>
