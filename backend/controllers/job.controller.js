@@ -24,8 +24,7 @@ export const handleCreateJob = async (req, res) => {
       !location ||
       !jobType ||
       !experience ||
-      !position ||
-      !sector
+      !position
     )
       return res.status(400).json({
         success: false,
