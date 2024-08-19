@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Dialog, DialogBackdrop, DialogPanel } from "@headlessui/react";
 import { Filter, X } from "lucide-react";
 import JobCard from "@/components/sub-components/JobCard";
+import { useSelector } from "react-redux";
 
 const filters = [
   {
@@ -50,10 +51,9 @@ const filters = [
   },
 ];
 
-const allJobs = [1, 2, 3, 4, 5, 6];
-
 const Jobs = () => {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+  const { allJobs } = useSelector((state) => state.job);
 
   return (
     <div className="bg-black/70">
@@ -176,9 +176,9 @@ const Jobs = () => {
 
               {/* Job Card grid */}
               <div className="lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 gap-6">
-                {allJobs.map((job, i) => (
-                  <div key={i}>
-                    <JobCard />
+                {allJobs.map((job) => (
+                  <div key={job._id}>
+                    <JobCard job={job} />
                   </div>
                 ))}
               </div>
