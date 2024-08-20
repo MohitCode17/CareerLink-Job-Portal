@@ -1,8 +1,21 @@
 import JobCard from "@/components/sub-components/JobCard";
-import { useSelector } from "react-redux";
+import useGetAllJobsClient from "@/hooks/useGetAllJobsClient";
+import { setSearchQueryText } from "@/store/slices/jobSlice";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 const Browse = () => {
+  useGetAllJobsClient();
+
   const { allJobs } = useSelector((state) => state.job);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    return () => {
+      dispatch(setSearchQueryText(""));
+    };
+  }, []);
+
   return (
     <div className="max-w-7xl mx-auto my-36 px-4">
       <h1 className="font-bold text-xl my-10 text-gray-300">
