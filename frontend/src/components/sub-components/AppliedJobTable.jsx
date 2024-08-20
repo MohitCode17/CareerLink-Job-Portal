@@ -1,3 +1,4 @@
+import { useSelector } from "react-redux";
 import { Badge } from "../ui/badge";
 import {
   Table,
@@ -8,10 +9,11 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-
-const allAppliedJobs = [1, 2, 3, 4, 5];
+import { capitalizeFirstLetter } from "@/utils/capitalizeFirstLetter";
 
 const AppliedJobTable = () => {
+  const { appliedJobs } = useSelector((state) => state.job);
+
   return (
     <div>
       <Table>
@@ -25,29 +27,31 @@ const AppliedJobTable = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {allAppliedJobs.length <= 0 ? (
+          {appliedJobs.length <= 0 ? (
             <span className="text-gray-600">
               You haven't applied any job yet.
             </span>
           ) : (
-            allAppliedJobs.map((appliedJob, index) => (
+            appliedJobs.map((appliedJob, index) => (
               <TableRow key={index}>
-                <TableCell className="text-gray-300">17 May 2024</TableCell>
                 <TableCell className="text-gray-300">
-                  Sr. Backend Developer
+                  {appliedJob?.updatedAt?.split("T")[0]}
                 </TableCell>
-                <TableCell className="text-gray-300">Google Inc.</TableCell>
+                <TableCell className="text-gray-300">
+                  {appliedJob?.job?.title}
+                </TableCell>
+                <TableCell className="text-gray-300">{capitalizeFirstLetter(appliedJob?.job?.company?.name)}</TableCell>
                 <TableCell className="text-right text-gray-300">
                   <Badge
                     className={`${
                       appliedJob?.status === "rejected"
-                        ? "bg-red-400 hover:bg-red-400"
+                        ? "bg-red-500 hover:bg-red-500"
                         : appliedJob.status === "pending"
-                        ? "bg-gray-400 hover:bg-gray-400"
-                        : "bg-green-400 hover:bg-green-400"
+                        ? "bg-gray-500 hover:bg-gray-500"
+                        : "bg-green-500 hover:bg-green-500"
                     }`}
                   >
-                    Accepted
+                    {appliedJob?.status?.toUpperCase()}
                   </Badge>
                 </TableCell>
               </TableRow>

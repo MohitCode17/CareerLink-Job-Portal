@@ -1,10 +1,13 @@
 import AppliedJobTable from "@/components/sub-components/AppliedJobTable";
 import EditProfileDialog from "@/components/sub-components/EditProfileDialog";
 import { Badge } from "@/components/ui/badge";
+import useGetAppliedJob from "@/hooks/useGetAppliedJob";
 import { Contact, Mail } from "lucide-react";
 import { useSelector } from "react-redux";
 
 const Profile = () => {
+  // GET APPLIED JOB APPLICATIONS
+  useGetAppliedJob();
   const { user } = useSelector((state) => state.auth);
 
   return (
