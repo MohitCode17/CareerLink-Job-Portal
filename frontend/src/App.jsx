@@ -14,6 +14,7 @@ import CompanySetup from "./components/admin/CompanySetup";
 import PostJob from "./components/admin/PostJob";
 import Applicants from "./components/admin/Applicants";
 import JobDescription from "./components/sub-components/JobDescription";
+import Browse from "./pages/Browse";
 
 const App = () => {
   return (
@@ -25,6 +26,7 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/jobs" element={<Jobs />} />
+        <Route path="/browse" element={<Browse />} />
         <Route path="/job/description/:id" element={<JobDescription />} />
 
         {/* ADMIN / RECRUITER RELATED ROUTES */}
