@@ -177,9 +177,7 @@ const Jobs = () => {
               {/* Job Card grid */}
               <div className="lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 gap-6">
                 {allJobs.map((job) => (
-                  <div key={job._id}>
-                    <JobCard job={job} />
-                  </div>
+                  <JobCard job={job} key={job._id} />
                 ))}
               </div>
             </div>
