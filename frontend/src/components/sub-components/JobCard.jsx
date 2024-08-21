@@ -14,7 +14,7 @@ const JobCard = ({ job }) => {
   };
 
   return (
-    <div className="p-5 rounded-md shadow-xl hover:shadow-2xl bg-black/10 border border-gray-800 hover:border-gray-700 transition-all duration-300 cursor-pointer">
+    <div className="p-5 rounded-md shadow-xl hover:shadow-2xl bg-black/10 border border-gray-800 hover:border-gray-700 transition-all duration-300 cursor-pointer h-fit">
       <div className="flex items-center justify-between">
         <p className="text-sm text-gray-400">
           {daysAgoFunction(job?.createdAt) === 0

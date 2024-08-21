@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Dialog, DialogBackdrop, DialogPanel } from "@headlessui/react";
 import { Filter, X } from "lucide-react";
 import JobCard from "@/components/sub-components/JobCard";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setSearchQueryText } from "@/store/slices/jobSlice";
 
 const filters = [
   {
@@ -53,7 +54,33 @@ const filters = [
 
 const Jobs = () => {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
-  const { allJobs } = useSelector((state) => state.job);
+  const { allJobs, searchQueryText } = useSelector((state) => state.job);
+  const [filteredJobs, setFilteredJobs] = useState(allJobs);
+
+  const dispatch = useDispatch();
+  const [selectedValue, setSelectedValue] = useState("");
+
+  useEffect(() => {
+    dispatch(setSearchQueryText(selectedValue));
+  }, [selectedValue]);
+
+  useEffect(() => {
+    if (searchQueryText) {
+      const filteredJobs = allJobs.filter((job) => {
+        return (
+          job.title.toLowerCase().includes(searchQueryText.toLowerCase()) ||
+          job.description
+            .toLowerCase()
+            .includes(searchQueryText.toLowerCase()) ||
+          job.location.toLowerCase().includes(searchQueryText.toLowerCase())
+        );
+      });
+
+      setFilteredJobs(filteredJobs);
+    } else {
+      setFilteredJobs(allJobs);
+    }
+  }, [allJobs, searchQueryText]);
 
   return (
     <div className="bg-black/70">
@@ -99,11 +126,8 @@ const Jobs = () => {
                       {section.options.map((option, optionIdx) => (
                         <div key={option.value} className="flex items-center">
                           <input
-                            defaultValue={option.value}
-                            defaultChecked={option.checked}
                             id={`filter-mobile-${section.id}-${optionIdx}`}
-                            name={`${section.id}[]`}
-                            type="checkbox"
+                            type="radio"
                             className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                           />
                           <label
@@ -154,12 +178,12 @@ const Jobs = () => {
                       {section.options.map((option, optionIdx) => (
                         <div key={option.value} className="flex items-center">
                           <input
-                            defaultValue={option.value}
-                            defaultChecked={option.checked}
                             id={`filter-${section.id}-${optionIdx}`}
-                            name={`${section.id}[]`}
-                            type="checkbox"
+                            type="radio"
                             className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                            value={option.value}
+                            checked={selectedValue === option.value}
+                            onChange={(e) => setSelectedValue(e.target.value)}
                           />
                           <label
                             htmlFor={`filter-${section.id}-${optionIdx}`}
@@ -175,8 +199,8 @@ const Jobs = () => {
               </form>
 
               {/* Job Card grid */}
-              <div className="lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 gap-6">
-                {allJobs.map((job) => (
+              <div className="lg:col-span-3 grid grid-cols-1 gap-6">
+                {filteredJobs.map((job) => (
                   <JobCard job={job} key={job._id} />
                 ))}
               </div>
