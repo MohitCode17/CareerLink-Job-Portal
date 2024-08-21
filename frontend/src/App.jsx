@@ -15,6 +15,7 @@ import PostJob from "./components/admin/PostJob";
 import Applicants from "./components/admin/Applicants";
 import JobDescription from "./components/sub-components/JobDescription";
 import Browse from "./pages/Browse";
+import ProtectedRoute from "./components/admin/ProtectedRoute";
 
 const App = () => {
   return (
@@ -30,12 +31,54 @@ const App = () => {
         <Route path="/job/description/:id" element={<JobDescription />} />
 
         {/* ADMIN / RECRUITER RELATED ROUTES */}
-        <Route path="/admin/companies" element={<Companies />} />
-        <Route path="/admin/companies/:id" element={<CompanySetup />} />
-        <Route path="/admin/jobs" element={<AdminJobs />} />
-        <Route path="/admin/job/create" element={<PostJob />} />
-        <Route path="/admin/company/create" element={<CreateCompany />} />
-        <Route path="/admin/jobs/:id/applicants" element={<Applicants />} />
+        <Route
+          path="/admin/companies"
+          element={
+            <ProtectedRoute>
+              <Companies />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/companies/:id"
+          element={
+            <ProtectedRoute>
+              <CompanySetup />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/jobs"
+          element={
+            <ProtectedRoute>
+              <AdminJobs />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/job/create"
+          element={
+            <ProtectedRoute>
+              <PostJob />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/company/create"
+          element={
+            <ProtectedRoute>
+              <CreateCompany />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/jobs/:id/applicants"
+          element={
+            <ProtectedRoute>
+              <Applicants />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
       <Footer />
       <Toaster />
