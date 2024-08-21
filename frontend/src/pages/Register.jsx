@@ -1,13 +1,15 @@
 import { BACKEND_USER_URL } from "@/constants/constants";
 import axios from "axios";
 import { Loader2, UserCircleIcon } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 const Register = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const { user } = useSelector((state) => state.auth);
 
   const [input, setInput] = useState({
     fullname: "",
@@ -73,6 +75,13 @@ const Register = () => {
     }
   };
 
+  // REDIRECT TO HOME IF USER EXISTS
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, []);
+
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-28 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -85,10 +94,7 @@ const Register = () => {
       </div>
 
       <div className=" mt-6 sm:mx-auto sm:w-full sm:max-w-sm">
-        <form
-          className="space-y-6"
-          onSubmit={handleSubmit}
-        >
+        <form className="space-y-6" onSubmit={handleSubmit}>
           <div>
             <label
               htmlFor="fullname"

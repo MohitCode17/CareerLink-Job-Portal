@@ -1,7 +1,7 @@
 import { BACKEND_USER_URL } from "@/constants/constants";
 import axios from "axios";
 import { Loader2 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,7 +10,7 @@ import { setLoading, setUser } from "@/store/slices/authSlice";
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { loading } = useSelector((state) => state.auth);
+  const { loading, user } = useSelector((state) => state.auth);
 
   const [input, setInput] = useState({
     email: "",
@@ -49,6 +49,12 @@ const Login = () => {
       );
     }
   };
+
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, []);
 
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-24 lg:px-8">
